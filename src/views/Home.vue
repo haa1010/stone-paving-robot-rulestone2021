@@ -62,7 +62,8 @@ export default {
           .then(response => {
             console.log(response)
             // this.patterns = response.data
-            this.$router.push({name: 'rest'});
+            this.$store.commit('setRobot', response.robot)
+            this.$router.push({name: 'resting'});
           })
           .catch(e => {
             console.log(e)

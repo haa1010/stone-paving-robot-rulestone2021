@@ -121,7 +121,7 @@ export default {
           })
     },
     remote(command) {
-      console.log(command)
+      console.log(this.$store.state.robot, command )
       axios.get(`${axios.defaults.baseURL}/robots/remote`, {
         params: {
           robot_id: this.$store.state.robot.id,

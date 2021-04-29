@@ -5,16 +5,40 @@
         <!--        Start working progress-->
         <div class="working-progress">
           <h1 class="color-light">Working progress</h1>
-          <div v-for="(value, key) in contents" :key="key">
-            <el-row>
-              <el-col :span="8">
-                <div style="font-weight: bold">{{ key }}</div>
-              </el-col>
-              <el-col :span="16">
-                <div>{{ value }}</div>
-              </el-col>
-            </el-row>
-          </div>
+          <!--          <div v-for="(value, key) in contents" :key="key">-->
+          <el-row>
+            <el-col :span="8">
+              <div style="font-weight: bold">Start at</div>
+            </el-col>
+            <el-col :span="16">
+              <div>{{ current_work.startAt }}</div>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="8">
+              <div style="font-weight: bold">Remaining time</div>
+            </el-col>
+            <el-col :span="16">
+              <div>{{ current_work.remainTime }}</div>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="8">
+              <div style="font-weight: bold">Number of paved stones</div>
+            </el-col>
+            <el-col :span="16">
+              <div>{{ current_work.stoneDone }}</div>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="8">
+              <div style="font-weight: bold">Total of stones have to pave</div>
+            </el-col>
+            <el-col :span="16">
+              <div>{{ current_work.totalStone }}</div>
+            </el-col>
+          </el-row>
+          <!--          </div>-->
         </div>
         <!--        End  working progress-->
 
@@ -36,15 +60,21 @@
         <!--      End pattern-->
       </el-col>
       <el-col :span="12">
-        <img src="@/assets/robot-controller.png" alt="" style="height: 400px">
+        <div class="remote-control">
+          <el-row><i class="el-icon-arrow-up" @click="remote(1)"></i></el-row>
+          <i class="el-icon-arrow-left" @click="remote(2)"></i>
+          <img src="@/assets/robot.png" alt="" style="height: 300px">
+          <i class="el-icon-arrow-right" @click="remote(3)"></i>
+          <el-row><i class="el-icon-arrow-down" @click="remote(4)"></i></el-row>
+        </div>
         <!--        Start remote control-->
         <div class="remote-control">
           <el-row>
-            <i class="el-icon-video-pause"></i>
-            <i class="el-icon-video-play"></i>
+            <i class="el-icon-video-pause" @click="setPause"></i>
+            <i class="el-icon-video-play" @click="setPause"></i>
           </el-row>
-          <i class="el-icon-upload2"></i>
-          <i class="el-icon-download"></i>
+          <i class="el-icon-upload2" @click="remote(5)"></i>
+          <i class="el-icon-download" @click="remote(6)"></i>
         </div>
         <!--      End remote control-->
       </el-col>
@@ -54,17 +84,56 @@
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
   name: 'active',
   data() {
     return {
-      contents: {
-        "Start at": "10:00 Saturday 12th April, 2021",
-        "Remaining time:": "1 hour",
-        "Number of paved stones": "10",
-        "Total of stones have to pave:": "100",
-        "Work completed": "10%"
+      current_work: {
+        "pattern": 1,
+        "remainTime": "Thu, 29 Apr 2021 06:29:38 GMT",
+        "startAt": "Thu, 29 Apr 2021 06:29:38 GMT",
+        "status": 0,
+        "stoneDone": 10,
+        "totalStone": 100
       }
+    }
+  },
+  created() {
+    axios.get(`${axios.defaults.baseURL}/robots/worksprogress`, {params: {id: this.$store.state.robot.id}})
+        .then(response => {
+          console.log(response)
+          this.current_work = response.data
+        })
+        .catch(e => {
+          console.log(e)
+        })
+  },
+  methods: {
+    setPause() {
+      axios.get(`${axios.defaults.baseURL}/robots/set-pause-status`, {params: {robot_id: this.$store.state.robot.id}})
+          .then(response => {
+            console.log(response)
+          })
+          .catch(e => {
+            console.log(e)
+          })
+    },
+    remote(command) {
+      console.log(command)
+      axios.get(`${axios.defaults.baseURL}/robots/remote`, {
+        params: {
+          robot_id: this.$store.state.robot.id,
+          cmd_id: this.command
+        }
+      })
+          .then(response => {
+            console.log(response)
+          })
+          .catch(e => {
+            console.log(e)
+          })
     }
   }
 }
@@ -82,5 +151,16 @@ export default {
 .remote-control i {
   font-size: 50px;
   margin: 20px;
+}
+.el-icon-arrow-right, .el-icon-arrow-left {
+  vertical-align: top;
+  line-height: 250px;
+  margin-top: 0;
+}
+i::before{
+  cursor: pointer;
+}
+.el-icon-right::before{
+  cursor: auto;
 }
 </style>

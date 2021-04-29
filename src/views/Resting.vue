@@ -9,7 +9,9 @@
 
 <script>
 export default {
-  name: "Resting"
+  name: "Resting",
+   created() {
+   }
 }
 </script>
 

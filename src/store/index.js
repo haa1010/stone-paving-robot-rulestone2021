@@ -4,9 +4,22 @@ import Vuex from 'vuex'
 Vue.use(Vuex)
 
 export default new Vuex.Store({
-    state: {},
+    state: {
+        robot : {
+            id: 0,
+            name: '',
+            state: -1
+        }
+    },
     getters:
         {},
-    mutations: {},
+    mutations: {
+        changeState(state, arg){
+            state.robot.state = arg
+        },
+        setRobot(state, arg) {
+            state.robot = arg
+        }
+    },
     actions: {}
 })

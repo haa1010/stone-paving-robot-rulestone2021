@@ -2,14 +2,14 @@
   <div class="hello">
     <ul style="margin: 100px">
       <li v-for="value in robots " :key="value.id">
-<!--                <router-link :to="{name: 'resting', params: {id: value.id}}" @click="chooseRobot(value.id)">-->
-<!--                  <img src="@/assets/robot.png" alt="" class="robot-img">-->
-<!--                  <p class="color-light">{{ value.name }}</p>-->
-<!--                </router-link>-->
-        <div class="li-robot" @click="chooseRobot(value.id)">
-                  <img src="@/assets/robot.png" alt="" class="robot-img">
-                  <p class="color-light">{{ value.name }}</p>
-                </div>
+        <!--                <router-link :to="{name: 'resting', params: {id: value.id}}" @click="chooseRobot(value.id)">-->
+        <!--                  <img src="@/assets/robot.png" alt="" class="robot-img">-->
+        <!--                  <p class="color-light">{{ value.name }}</p>-->
+        <!--                </router-link>-->
+        <div class="li-robot" @click="chooseRobot(value)">
+          <img src="@/assets/robot.png" alt="" class="robot-img">
+          <p class="color-light">{{ value.name }}</p>
+        </div>
       </li>
     </ul>
     <h1 class="">Choose your robot to connect!</h1>
@@ -25,44 +25,31 @@ export default {
     return {
       robots: [
         {
-          img: require('@/assets/robot.png'),
-          name: 'Robot 1',
-          id: 1
-        }, {
-          img: require('@/assets/robot.png'),
-          name: 'Robot 2',
-          id: 2
-        }, {
-          img: require('@/assets/robot.png'),
-          name: 'Robot 3',
-          id: 3
-        }, {
-          img: require('@/assets/robot.png'),
-          name: 'Robot 4',
-          id: 4
-        },
+          name: '',
+          id: 0,
+          status: 0
+        }
       ]
     }
   },
   created() {
     axios.get(`${axios.defaults.baseURL}/robots`)
         .then(response => {
-          console.log(response)
-          this.robots = response.data
-          this.$store.commit('setRobot', response.robot)
+          this.robots = response.data.robots
+          this.$store.commit('setRobot', response.data.robots)
         })
         .catch(e => {
           console.log(e)
         })
   },
   methods: {
-    chooseRobot(id) {
-      console.log(id)
-      axios.get(`${axios.defaults.baseURL}/robots`,  { params: { id: this.id }})
+    // eslint-disable-next-line no-unused-vars
+    chooseRobot(value) {
+      axios.get(`${axios.defaults.baseURL}/robots`, {params: {id: value.id}})
+          // eslint-disable-next-line no-unused-vars
           .then(response => {
-            console.log(response)
             // this.patterns = response.data
-            this.$store.commit('setRobot', response.robot)
+            this.$store.commit('setRobot', value)
             this.$router.push({name: 'resting'});
           })
           .catch(e => {
@@ -79,12 +66,12 @@ h3 {
   margin: 40px 0 0;
 }
 
-.li-robot{
+.li-robot {
   font-size: 28px;
   font-weight: bold;
 }
 
-.li-robot:hover{
+.li-robot:hover {
   cursor: pointer;
 }
 

@@ -103,7 +103,6 @@ export default {
   created() {
     axios.get(`${axios.defaults.baseURL}/robots/worksprogress`, {params: {id: this.$store.state.robot.id}})
         .then(response => {
-          console.log(response)
           this.current_work = response.data
         })
         .catch(e => {
@@ -120,13 +119,11 @@ export default {
             console.log(e)
           })
     },
+    // eslint-disable-next-line no-unused-vars
     remote(command) {
-      console.log(this.$store.state.robot, command )
       axios.get(`${axios.defaults.baseURL}/robots/remote`, {
-        params: {
-          robot_id: this.$store.state.robot.id,
-          cmd_id: this.command
-        }
+        robot_id: this.$store.state.robot.id,
+        cmd_id: this.command
       })
           .then(response => {
             console.log(response)
@@ -152,15 +149,18 @@ export default {
   font-size: 50px;
   margin: 20px;
 }
+
 .el-icon-arrow-right, .el-icon-arrow-left {
   vertical-align: top;
   line-height: 250px;
   margin-top: 0;
 }
-i::before{
+
+i::before {
   cursor: pointer;
 }
-.el-icon-right::before{
+
+.el-icon-right::before {
   cursor: auto;
 }
 </style>

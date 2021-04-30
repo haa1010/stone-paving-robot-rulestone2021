@@ -103,7 +103,7 @@ export default {
   created() {
     axios.get(`${axios.defaults.baseURL}/robots/worksprogress`, {params: {id: this.$store.state.robot.id}})
         .then(response => {
-          this.current_work = response.data
+          this.current_work = response.data.current_work
         })
         .catch(e => {
           console.log(e)
@@ -121,10 +121,10 @@ export default {
     },
     // eslint-disable-next-line no-unused-vars
     remote(command) {
-      axios.get(`${axios.defaults.baseURL}/robots/remote`, {
+      axios.get(`${axios.defaults.baseURL}/robots/remote`, {params: {
         robot_id: this.$store.state.robot.id,
-        cmd_id: this.command
-      })
+        cmd_id: command
+      }})
           .then(response => {
             console.log(response)
           })

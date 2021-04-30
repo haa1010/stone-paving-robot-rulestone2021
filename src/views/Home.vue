@@ -45,7 +45,7 @@ export default {
   methods: {
     // eslint-disable-next-line no-unused-vars
     chooseRobot(value) {
-      axios.get(`${axios.defaults.baseURL}/robots`, {params: {id: value.id}})
+      axios.get(`${axios.defaults.baseURL}/robots/${value.id}`)
           // eslint-disable-next-line no-unused-vars
           .then(response => {
             // this.patterns = response.data
